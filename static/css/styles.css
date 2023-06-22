@@ -1,0 +1,6 @@
+span.non-clickable {
+    color: #999999;
+    cursor: default;
+    text-decoration: none;
+  }
+  

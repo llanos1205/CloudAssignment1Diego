@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h1>Reserved Books</h1>
+  {% if reserved_books %}
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Author</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for book in reserved_books %}
+        <tr>
+          <td>{{ book.name }}</td>
+          <td>{{ book.author }}</td>
+          <td>
+            {% if user.is_authenticated %}
+              {% if book.reserved_by == user %}
+                <a href="{% url 'unreserve_book' book.id %}">Unreserve</a>
+              {% else %}
+                Not Reserved by You
+              {% endif %}
+            {% else %}
+              Login to Unreserve
+            {% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <p>No books reserved.</p>
+  {% endif %}
+{% endblock %}
