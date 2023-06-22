@@ -1,0 +1,32 @@
+#cloud-config
+package_upgrade: true
+packages:
+  - nginx
+  - python3-pip
+write_files:
+  - owner: www-data:www-data
+    path: /var/www/html/index.html
+    content: |
+      Hello world from Virtual Machine Scale Set!
+  - owner: www-data:www-data
+    path: /etc/nginx/sites-available/default
+    content: |
+      server {
+          listen 80;
+          server_name _;
+
+          location / {
+              proxy_pass http://127.0.0.1:8000;
+              proxy_set_header Host $host;
+              proxy_set_header X-Real-IP $remote_addr;
+          }
+      }
+runcmd:
+  - service nginx restart
+  - cd /var/www/html
+  - git clone <your_repository_url>  # Clone your Django application repository
+  - cd <your_repository_name>  # Navigate to your Django application directory
+  - pip3 install -r requirements.txt  # Install required Python packages
+  - python3 manage.py migrate  # Perform Django database migrations
+  - python3 manage.py collectstatic --noinput  # Collect static files
+  - nohup python3 manage.py runserver 0.0.0.0:8000 &  # Start Django development server in the background
