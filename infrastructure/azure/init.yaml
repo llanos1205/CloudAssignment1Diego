@@ -26,6 +26,9 @@ runcmd:
   - cd /var/www/html
   - git clone <your_repository_url>  # Clone your Django application repository
   - cd <your_repository_name>  # Navigate to your Django application directory
+  - pip3 install virtualenv
+  - virtualenv venv
+  - source venv/bin/activate
   - pip3 install -r requirements.txt  # Install required Python packages
   - python3 manage.py migrate  # Perform Django database migrations
   - python3 manage.py collectstatic --noinput  # Collect static files

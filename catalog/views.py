@@ -1,11 +1,13 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from .models import Book,User
+from .models import Book, User
 from .data.data_mocker import DataMocker
+from django.views.decorators.csrf import csrf_protect
 
 mocker = DataMocker()
 mocker.generate_mock_data()
+
 
 def home(request):
     sort_by = request.GET.get('sort_by', 'name')  # Default sort by name
@@ -30,10 +32,12 @@ def reserve_book(request, book_id):
         book.save()
     return redirect('home')
 
+
 @login_required
 def reserved_books(request):
     reserved_books = Book.objects.filter(reserved_by=request.user)
     return render(request, 'reserved_books.html', {'reserved_books': reserved_books})
+
 
 @login_required
 def unreserve_book(request, book_id):
@@ -45,6 +49,7 @@ def unreserve_book(request, book_id):
     return redirect('home')
 
 
+@csrf_protect
 def login_view(request):
     if request.method == 'POST':
         username = request.POST['username']
@@ -57,6 +62,7 @@ def login_view(request):
             return render(request, 'login.html', {'message': 'Invalid credentials.'})
     return render(request, 'login.html')
 
+
 def signup_view(request):
     if request.method == 'POST':
         username = request.POST['username']
@@ -64,6 +70,7 @@ def signup_view(request):
         User.objects.create_user(username=username, password=password)
         return redirect('login')
     return render(request, 'signup.html')
+
 
 @login_required
 def logout_view(request):
