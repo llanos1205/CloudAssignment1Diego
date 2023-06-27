@@ -24,7 +24,7 @@ SECRET_KEY = 'django-insecure-nqx4p8dal%hcc3yx&l$wf8plt0xpiypj&^t=(((=45p8jvq_4q
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['llanostestweek03.azurewebsites.net']
+ALLOWED_HOSTS = ['llanostestweek03.azurewebsites.net', '*']
 
 AUTH_USER_MODEL = 'catalog.User'
 
@@ -122,7 +122,8 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CORS_ORIGIN_WHITELIST = [
-    'https://llanostestweek03.azurewebsites.net'
+    'https://llanostestweek03.azurewebsites.net',
+    '*'
     # Add other trusted origins if needed
 ]
-CSRF_TRUSTED_ORIGINS = ['https://llanostestweek03.azurewebsites.net']
+CSRF_TRUSTED_ORIGINS = ['https://llanostestweek03.azurewebsites.net', 'https://*']

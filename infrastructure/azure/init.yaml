@@ -5,10 +5,6 @@ packages:
   - python3-pip
 write_files:
   - owner: www-data:www-data
-    path: /var/www/html/index.html
-    content: |
-      Hello world from Virtual Machine Scale Set!
-  - owner: www-data:www-data
     path: /etc/nginx/sites-available/default
     content: |
       server {
