@@ -78,10 +78,17 @@ WSGI_APPLICATION = 'library.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'sql_server.pyodbc',
+        'NAME': 'soft807-llanos-db-instance',
+        'HOST': 'soft807-llanos-db-server.database.windows.net',
+        'USER': 'dallanos@soft807-llanos-db-server.database.windows.net',
+        'PASSWORD': 'LL@pass1314',
+        'OPTIONS': {
+            'driver': 'ODBC Driver 17 for SQL Server',
+        },
     }
 }
+
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -126,4 +133,5 @@ CORS_ORIGIN_WHITELIST = [
     '*'
     # Add other trusted origins if needed
 ]
-CSRF_TRUSTED_ORIGINS = ['https://llanostestweek03.azurewebsites.net', 'https://*']
+CSRF_TRUSTED_ORIGINS = ['https://soft807-llanos.azurewebsites.net', 'https://*', 'http://*']
+# CSRF_COOKIE_SAMESITE = None

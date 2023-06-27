@@ -1,10 +1,13 @@
 location="eastus"
-rg="app-service-rg"
+rg="db-rg"
 name="soft807-llanos"
-plan="$name-plan"
-az group create --name <resource-group-name> --location <region>
-az sql server create --name <server-name> --resource-group <resource-group-name> \
---location <region> --admin-user <admin-username> --admin-password <admin-password> \
- --enable-public-network false --minimal-tls-version 1.2
-az sql db create --name <database-name> --resource-group <resource-group-name> \
---server <server-name> --edition Basic --family Gen4 --capacity 1
+user="dallanos"
+pass="pass1314"
+az group create --name $rg --location $location
+az sql server create --name "$name-db-server" --resource-group $rg \
+--location $location --admin-user $user --admin-password $pass \
+ --enable-public-network true --minimal-tls-version 1.2
+
+
+az sql db create --name "$name-db-instance" --resource-group $rg \
+--server "$name-db-server" --edition Basic --family Gen4 --capacity 1
