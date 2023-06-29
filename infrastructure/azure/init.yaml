@@ -26,9 +26,5 @@ runcmd:
   - virtualenv venv
   - source venv/bin/activate
   - pip3 install -r requirements.txt  # Install required Python packages
-  - python3 manage.py makemigrations catalog
-  - python3 manage.py migrate catalog
-  - python3 manage.py makemigrations
-  - python3 manage.py migrate
   - python3 manage.py collectstatic --noinput  # Collect static files
   - nohup python3 manage.py runserver 0.0.0.0:8000 &  # Start Django development server in the background

@@ -24,13 +24,6 @@ az vmss create \
   --lb-sku basic \
   --nsg $sgName
 
-# Enable public IP with static allocation for each VM in the VMSS
-az vmss update \
-  --resource-group $rg \
-  --name $name \
-  --add virtualMachineProfile.networkProfile.networkInterfaceConfigurations[].ipConfigurations[].publicIpAddressConfiguration="{"name": "publicipconfig", "publicIpAllocationMethod": "Static"}"
-
-
 echo "Creating Probe"
 az network lb probe create \
   --lb-name $lb \
