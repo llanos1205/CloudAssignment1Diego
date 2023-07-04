@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
-
+CLOUD_ENGINE= "aws"
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -76,18 +76,32 @@ WSGI_APPLICATION = 'library.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'sql_server.pyodbc',
-        'NAME': 'soft807-llanos-db-instance',
-        'HOST': 'soft807-llanos-db-server.database.windows.net',
-        'USER': 'dallanos@soft807-llanos-db-server.database.windows.net',
-        'PASSWORD': 'LL@pass1314',
-        'OPTIONS': {
-            'driver': 'ODBC Driver 17 for SQL Server',
-        },
+if CLOUD_ENGINE == "azure":
+    DATABASES = {
+        'default': {
+            'ENGINE': 'sql_server.pyodbc',
+            'NAME': 'soft807-llanos-db-instance',
+            'HOST': 'soft807-llanos-db-server.database.windows.net',
+            'USER': 'dallanos@soft807-llanos-db-server.database.windows.net',
+            'PASSWORD': 'LL@pass1314',
+            'OPTIONS': {
+                'driver': 'ODBC Driver 17 for SQL Server',
+            },
+        }
     }
-}
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'sql_server.pyodbc',
+            'NAME': 'soft807-llanos-db-instance',
+            'HOST': 'my-db-instance.c2kgd2qcpwef.us-east-1.rds.amazonaws.com',
+            'USER': 'admin',
+            'PASSWORD': 'admin123',
+            'OPTIONS': {
+                'driver': 'ODBC Driver 17 for SQL Server',
+            },
+        }
+    }
 
 
 # Password validation

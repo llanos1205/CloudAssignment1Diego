@@ -1,25 +1,33 @@
-name="soft807-llanos"
-version="1.0.0"
-s3="soft807-llanos"
-aws s3api create-bucket --bucket $s3 --region us-east-1
-aws s3api put-bucket-policy --bucket $s3 --policy '{
-    "Version":"2012-10-17",
-    "Statement":[
-        {
-            "Sid":"PublicReadGetObject",
-            "Effect":"Allow",
-            "Principal": "*",
-            "Action":["s3:GetObject"],
-            "Resource":["arn:aws:s3:::soft807-llanos/*"]
-        }
-    ]
-}'
+#!/bin/bash
 
-aws elasticbeanstalk create-application --application-name $name
-aws elasticbeanstalk create-environment --application-name $name \
-  --environment-name "{$name}-env"--solution-stack-name "64bit Amazon Linux 2 v5.4.5 running Python 3.10"
-zip -r CloudAssignment1Diego.zip .
-aws elasticbeanstalk create-application-version --application-name $name \
-  --version-label $version --source-bundle S3Bucket=$s3,S3Key=CloudAssignment1Diego.zip
-aws elasticbeanstalk update-environment --environment-name "{$name}-env" |
-  --version-label $version
+# Set variables
+EB_APP_NAME="your-eb-app-name"
+EB_ENV_NAME="your-eb-env-name"
+RDS_INSTANCE_IDENTIFIER="your-rds-instance-identifier"
+DB_NAME="your-db-name"
+DB_USERNAME="your-db-username"
+DB_PASSWORD="your-db-password"
+
+# Create Elastic Beanstalk application
+aws elasticbeanstalk create-application --application-name $EB_APP_NAME
+
+# Create Elastic Beanstalk environment
+aws elasticbeanstalk create-environment --application-name $EB_APP_NAME --environment-name $EB_ENV_NAME --solution-stack-name "64bit Amazon Linux 2 v3.4.6 running Python 3.8"
+
+# Configure RDS database
+
+# Wait for RDS database to be available
+aws rds wait db-instance-available --db-instance-identifier $RDS_INSTANCE_IDENTIFIER
+
+# Create Elastic Beanstalk environment configuration file
+cat <<EOF >.ebextensions/db.config
+option_settings:
+  aws:rds:dbinstance:
+    DBInstanceIdentifier: $RDS_INSTANCE_IDENTIFIER
+    DBName: $DB_NAME
+    DBUser: $DB_USERNAME
+    DBPassword: $DB_PASSWORD
+EOF
+
+# Deploy the application
+eb deploy --profile your-aws-profile-name --region your-aws-region --label your-deployment-label

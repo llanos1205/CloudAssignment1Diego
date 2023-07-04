@@ -1,19 +1,13 @@
-location="eastus"
-rg="db-rg"
-name="soft807-llanos"
-user="dallanos"
-pass="LL@pass1314"
-echo "Creating Rg"
-az group create --name $rg --location $location
-echo "Creating Server"
-az sql server create --name "$name-db-server" --resource-group $rg \
-  --location $location --admin-user $user --admin-password $pass \
-  --enable-public-network true --minimal-tls-version 1.2
-echo "Creating Instance"
-az sql server firewall-rule create --resource-group $rg \
-  --server "$name-db-server" --name "AllowAllIPs" \
-  --start-ip-address "0.0.0.0" --end-ip-address "255.255.255.255"
-echo "Creating Rules"
-az sql db create --name "$name-db-instance" --resource-group $rg \
-  --server "$name-db-server" --edition Basic --capacity 5
 
+# Set variables
+
+RDS_INSTANCE_IDENTIFIER="soft807"
+DB_NAME="catalog"
+DB_USERNAME="awsuser"
+DB_PASSWORD="LL@ltair1205"
+# Set variables
+VPC_ID="soft807"
+SUBNET_CIDR="10.0.0.0/24"
+AVAILABILITY_ZONE="us-east-1a"
+
+aws rds create-db-instance --db-instance-identifier $RDS_INSTANCE_IDENTIFIER --db-instance-class db.t2.micro --engine mysql --allocated-storage 20 --db-name $DB_NAME --master-username $DB_USERNAME --master-user-password $DB_PASSWORD

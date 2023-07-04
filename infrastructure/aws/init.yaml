@@ -1,41 +1,9 @@
 #cloud-config
+package_upgrade: true
 packages:
   - nginx
-  - python3-pip
-  - git
-
-write_files:
-  - owner: root:root
-    path: /etc/nginx/conf.d/default.conf
-    content: |
-      server {
-          listen 80;
-          server_name _;
-
-          location / {
-              proxy_pass http://127.0.0.1:8000;
-              proxy_set_header Host $host;
-              proxy_set_header X-Real-IP $remote_addr;
-          }
-      }
-  - owner: ec2-user:ec2-user
-    path: /home/ec2-user/start_server.sh
-    content: |
-      #!/bin/bash
-      cd /home/ec2-user/<your_repository_name>  # Replace with the correct path to your Django application
-      source venv/bin/activate  # Activate your Python virtual environment
-      python3 manage.py migrate  # Perform Django database migrations
-      python3 manage.py collectstatic --noinput  # Collect static files
-      nohup python3 manage.py runserver 0.0.0.0:8000 &  # Start Django development server in the background
-
 runcmd:
-  - service nginx start
-  - cd /home/ec2-user
-  - git clone <your_repository_url>  # Clone your Django application repository
-  - cd <your_repository_name>  # Navigate to your Django application directory
-  - pip3 install virtualenv  # Install virtualenv package
-  - virtualenv venv  # Create a Python virtual environment
-  - source venv/bin/activate  # Activate the virtual environment
-  - pip3 install -r requirements.txt  # Install required Python packages
-  - chmod +x /home/ec2-user/start_server.sh  # Make the start script executable
-  - /home/ec2-user/start_server.sh  # Run the start script to start the Django server
+  - cd /var/www/html
+  - cd CloudAssignment1Diego # Navigate to your Django application directory
+  - source venv/bin/activate
+  - nohup sudo python3 manage.py runserver 0.0.0.0:8000 &
