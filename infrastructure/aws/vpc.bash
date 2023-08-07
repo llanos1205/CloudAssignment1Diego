@@ -41,7 +41,7 @@ echo "Created Security Group with ID: $securityGroupId"
 # Configure Security Group Inbound Rules
 aws ec2 authorize-security-group-ingress --group-id $securityGroupId --protocol tcp --port 80 --cidr 0.0.0.0/0
 aws ec2 authorize-security-group-ingress --group-id $securityGroupId --protocol tcp --port 22 --cidr 0.0.0.0/0
-aws ec2 authorize-security-group-ingress --group-id $securityGroupId --protocol tcp --port 1433 --cidr 0.0.0.0/0
+aws ec2 authorize-security-group-ingress --group-id $securityGroupId --protocol tcp --port 1433 --cidr 10.0.0.0/8
 echo "Configured Security Group inbound rules"
 
 # Create Subnet Group
@@ -53,7 +53,8 @@ echo "Created Subnet Group with ARN: $subnetGroupArn"
 # Create Internet Gateway, Route Table, Security Group, and other resources (same as before)
 
 # Create RDS Instance
-rdsInstanceId=$(aws rds create-db-instance --engine sqlserver-ex --engine-version 14.00.3281.6.v1 --db-instance-identifier my-db-instance --allocated-storage 20 --db-instance-class db.t3.small --master-username admin --master-user-password admin123 --backup-retention-period 0 --storage-type standard --port 1433 --publicly-accessible --db-subnet-group-name $subnetGroupName --output text --query 'DBInstance.DBInstanceIdentifier')
+rdsInstanceId=$(aws rds create-db-instance --engine sqlserver-se --engine-version 14.00.3421.10.v1 --storage-encrypted --db-instance-identifier my-db-instance --allocated-storage 20 --db-instance-class db.t3.small --master-username admin --master-user-password admin123 --backup-retention-period 0 --storage-type standard --port 1433 --publicly-accessible --db-subnet-group-name $subnetGroupName --output text --query 'DBInstance.DBInstanceIdentifier' --db-name 'soft807-llanos-db-instance' --vpc-security-group-ids $securityGroupId )
+
 
 
 echo "Created RDS Instance with ID: $rdsInstanceId"

@@ -11,7 +11,8 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
-CLOUD_ENGINE= "aws"
+
+CLOUD_ENGINE = "local"
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -22,10 +23,15 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-nqx4p8dal%hcc3yx&l$wf8plt0xpiypj&^t=(((=45p8jvq_4q'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['llanostestweek03.azurewebsites.net', '*']
-
+CORS_ORIGIN_WHITELIST = [
+    'https://llanostestweek03.azurewebsites.net',
+    '*'
+    # Add other trusted origins if needed
+]
+CSRF_TRUSTED_ORIGINS = ['https://soft807-llanos.azurewebsites.net', 'https://*', 'http://*']
 AUTH_USER_MODEL = 'catalog.User'
 
 LOGIN_URL = '/login/'
@@ -89,7 +95,7 @@ if CLOUD_ENGINE == "azure":
             },
         }
     }
-else:
+elif CLOUD_ENGINE == "aws":
     DATABASES = {
         'default': {
             'ENGINE': 'sql_server.pyodbc',
@@ -102,7 +108,14 @@ else:
             },
         }
     }
-
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': 'mydb.sqlite',  # This is where you put the name of the db file.
+            # If one doesn't exist, it will be created at migration time.
+        }
+    }
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -142,10 +155,5 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-CORS_ORIGIN_WHITELIST = [
-    'https://llanostestweek03.azurewebsites.net',
-    '*'
-    # Add other trusted origins if needed
-]
-CSRF_TRUSTED_ORIGINS = ['https://soft807-llanos.azurewebsites.net', 'https://*', 'http://*']
+
 # CSRF_COOKIE_SAMESITE = None

@@ -12,7 +12,10 @@ az sql server create --name "$name-db-server" --resource-group $rg \
 echo "Creating Instance"
 az sql server firewall-rule create --resource-group $rg \
   --server "$name-db-server" --name "AllowAllIPs" \
-  --start-ip-address "0.0.0.0" --end-ip-address "255.255.255.255"
+  --start-ip-address "10.0.0.0" --end-ip-address "10.0.0.255"
+
 echo "Creating Rules"
 az sql db create --name "$name-db-instance" --resource-group $rg \
   --server "$name-db-server" --edition Basic --capacity 5
+echo "encrypt"
+az sql db tde set --resource-group $rg --server $name-db-server --database $name-db-instance --status Enabled
